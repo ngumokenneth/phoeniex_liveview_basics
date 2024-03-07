@@ -19,6 +19,9 @@ defmodule LiveviewBasicsWeb.Router do
 
     get "/", PageController, :home
     live "/form", FormLive
+    live "/guess", GuessLive
+    live "/register", UserRegistrationLive
+    live "/login", LoginLive
   end
 
   # Other scopes may use custom stacks.

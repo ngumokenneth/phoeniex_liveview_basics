@@ -15,4 +15,6 @@ defmodule LiveviewBasics.Repo.Migrations.FootballPlayer do
 
     create unique_index(:players, [:first_name, :last_name])
   end
+
+  
 end

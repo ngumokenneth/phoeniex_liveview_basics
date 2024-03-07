@@ -1,0 +1,10 @@
+<h1>Welcome to login page</h1>
+<.simple_form for={@form} phx-change="validate" phx-submit="submit">
+  <.input type="text" label="Name" field={@form[:name]}>Name</.input>
+  <.input type="email" label="Email" field={@form[:email]}>Email</.input>
+  <.input type="password" label="Password" field={@form[:password]}>Password</.input>
+
+  <:actions>
+    <.button>Login</.button>
+  </:actions>
+</.simple_form>
