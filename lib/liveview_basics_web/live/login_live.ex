@@ -62,7 +62,7 @@ defmodule LiveviewBasicsWeb.LoginLive do
   def handle_submit(user_params, socket) do
     case Accounts.login(user_params) do
       {:ok, _user} -> put_flash(socket, :message, "Ready for testing")
-      {:error, :error} -> put_flash(socket, :error, "check logs for errors")
+      {:error, _error} -> put_flash(socket, :error, "check logs for errors")
     end
   end
 end

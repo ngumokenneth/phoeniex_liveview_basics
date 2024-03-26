@@ -29,8 +29,8 @@ defmodule LiveviewBasicsWeb.GuessLive do
     What is Liveview.
 
     => Liveview is a web development framework that enables rich real-time user experience through server rendered HTML.
-    => Liveviews are process that receive events, change state and render the changed state.
-    => Once an event X is invoked (e.g Validate) a message is sent to the server to change the state of Y and render the new state of Y.
+    => Liveviews are processes that receive events, change state and render the changed state.
+    => i.e: Once an event X is invoked (e.g Validate) a message is sent to the server to change the state of Y and render the new state of Y.
 
 
 
@@ -38,27 +38,32 @@ defmodule LiveviewBasicsWeb.GuessLive do
     => Events can be triggered in two ways:
         (1) internally -> this is through messages by Phoenix.PubSub
         (2) externally -> this is through a client/browser
-    => Liveviews are first rendered as static pages through a HTTP connection/request. The HTTP connection is then upgraded to a permanent/persistent web-socket connection.
+    => Liveviews are first rendered as static pages through a HTTP connection/request. The first render a user can only see the page but user events cannot be sent to the server.
+    The HTTP connection is then upgraded to a permanent/persistent web-socket connection.
 
     => Liveview implements a series of functions as callbacks.
     (1) mount(params, session, socket)
     -> This function accepts 3 arguments: params, session & socket
-        (i) params -> contains information about the request and can be used to read information from the URL.
+        (i) params -> This is  It's a map of string keys that can be modified by a user.
+        contains information about the request and can be used to read information from the URL.
+
         (ii) session -> contains information about the current user
         (iii) socket -> This is a struct that holds the state of the liveview.
-    -> The return value of mount is {:ok, socket}
+    -> The return value of mount is {:ok, socket} or {:ok, socket, options} where options contains (a) :temporary assigns (b) :layout
 
-    (2) handle_params(params, session, socket)
+    (2) handle_params(params, uri, socket) -> Handle_params/3 is invoked after mount & when a live_patch/live_navigation event occurs. It's return value is {:noreply, socket} where :noreply means no additional information is sent to the client.
 
     (3) handle_event(event, session, socket)
-        => handle_event callbacks are invoked by user activity, the event is then sent to the server which is matched to a handle_event callback. The callback function handles the data manipulation and updates the socket. The return value is {:noreply, socket} tuple.
+        => handle_event callbacks are invoked by user activity, the event is then sent to the server which is matched to a handle_event callback. The callback function handles the data manipulation and updates the socket. The return value is {:noreply, socket} tuple or {:noreply, map(), socket}, the map is encoded & sent as a reply to the client.
 
     (4) render(assigns)
         => the render callback is invoked to display data in the socket assigns map.
         => One can use the ~H sigil or create a liveview_name_live.html.heex template file to render the data.
-    (5) handle_info(;event, socket)
-        => this callback function receives an event and a socket.
-        => it's used to handle internal messages.
+    (5) handle_info(:msg, socket)
+        => this callback function receives a message and a socket.
+        => it's used to handle messages sent by other processes.
+        => it's return value is {:noreply, socket}, where :noreply means no additional information is sent to the client.
+
 
     Liveview NAVIGATION
 
